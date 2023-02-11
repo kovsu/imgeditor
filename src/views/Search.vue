@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { images } from "../composable/data";
 
 enum Status {
   NORMAL = "normal",
@@ -8,37 +9,39 @@ enum Status {
   FAIL = "fail",
 }
 
-const status = ref(Status.SUCCESS);
+const status = ref(Status.NORMAL);
+
+const url = ref<string>("");
+
+function addImage() {
+  if (url.value) {
+    images.value.push({
+      url: url.value,
+      edit: false,
+    });
+    url.value = "";
+  }
+}
+
+function removeImage(index: number) {
+  images.value.splice(index, 1);
+}
 </script>
 
 <template>
   <section class="search_container">
     <div class="search_input">
-      <input type="text" placeholder="Please input img url...">
-      <button>
+      <input v-model="url" type="text" placeholder="Please input img url...">
+      <button @click="addImage">
         <Icon v-if="status === Status.NORMAL" class="result_logo" icon="vaadin:search" />
-        <Icon v-if="status === Status.LOADING" class="result_logo" icon="line-md:loading-loop" />
-        <div class="result_logo">
-          <span v-if="status === Status.SUCCESS">😍</span>
-          <span v-if="status === Status.FAIL">😒</span>
-        </div>
       </button>
     </div>
-    <div class="search_results">
-      <div class="search_res">
-        <img src="https://images.unsplash.com/photo-1675969563450-522861e76929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=2000&q=60" alt="">
-      </div>
-      <div class="search_res">
-        <img src="https://images.unsplash.com/photo-1675969563450-522861e76929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=2000&q=60" alt="">
-      </div>
-      <div class="search_res">
-        <img src="https://images.unsplash.com/photo-1675969563450-522861e76929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=2000&q=60" alt="">
-      </div>
-      <div class="search_res">
-        <img src="https://images.unsplash.com/photo-1675969563450-522861e76929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=2000&q=60" alt="">
-      </div>
-      <div class="search_res">
-        <img src="https://images.unsplash.com/photo-1675969563450-522861e76929?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=2000&q=60" alt="">
+    <div v-auto-animate class="search_results">
+      <div v-for="(img, i) in images" :key="i" class="search_res">
+        <img :src="img.url">
+        <div class="close" @click="removeImage(i)">
+          <Icon icon="vaadin:close" />
+        </div>
       </div>
     </div>
   </section>
@@ -120,14 +123,39 @@ const status = ref(Status.SUCCESS);
   }
 
   &_res {
-      width: 32rem;
-      height: 24rem;
+    position: relative;
+    width: 32rem;
+    height: 24rem;
 
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
+  }
+}
+
+.close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+
+  padding: 0.6rem;
+  background-color: $secondary-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: $primary-color;
+  }
+
+  svg {
+    font-size: 1.2rem;
+    color: #fff;
+  }
 }
 </style>
