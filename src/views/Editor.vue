@@ -1,11 +1,22 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+import ImageEditor from "../components/ImageEditor.vue";
 import TheOption from "../components/Option.vue";
+
+const w = ref(100);
+const h = ref(100);
+const c = ref<HTMLCanvasElement | null>(null);
+
+onMounted(() => {
+  w.value = c.value!.getBoundingClientRect().width * 2;
+  h.value = c.value!.getBoundingClientRect().height * 2;
+});
 </script>
 
 <template>
   <div class="editor__container">
-    <div class="editor__main">
-      <canvas />
+    <div ref="c" class="editor__main">
+      <ImageEditor :w="w" :h="h" />
     </div>
     <div class="editor__options">
       <TheOption type="text">
@@ -51,14 +62,11 @@ import TheOption from "../components/Option.vue";
   }
 
   &__main {
+    position: relative;
     width: 60%;
     height: calc(100vh - 25rem);
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      border: 1px solid #000;
-    }
+    border-radius: 2px;
+    border: 1px solid #000;
   }
 
   &__options {

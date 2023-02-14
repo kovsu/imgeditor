@@ -4,8 +4,6 @@ defineProps<{
 }>();
 
 function togglePanel() {
-  console.log("hi");
-
   document.querySelector(".wait__list")!.classList.toggle("active");
 }
 </script>

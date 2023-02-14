@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { nowImage } from "../composable/data";
+
+const props = defineProps<{
+  w: number
+  h: number
+}>();
+
+const context = ref<CanvasRenderingContext2D | null>(null);
+const c = ref<HTMLCanvasElement | null>(null);
+
+onMounted(() => {
+  context.value = c.value!.getContext("2d");
+  drawImage();
+});
+
+function drawImage() {
+  if (!nowImage.value?.url) return;
+
+  const img = new Image();
+  img.src = nowImage.value.url;
+  const widthRate = img.width / (img.height + img.width);
+  const heightRate = img.height / (img.height + img.width);
+
+  img.onload = () => {
+    context.value!.drawImage(img, 0, 0, props.w * widthRate * nowImage.value!.zoom, props.h * heightRate * nowImage.value!.zoom);
+  };
+}
+</script>
+
+<template>
+  <canvas ref="c" :width="w" :height="h" :style="{ width: `${w / 2}px`, height: `${h / 2}px` }" />
+  <div class="cut" :style="{ width: `${nowImage?.width}px`, height: `${nowImage?.height}px` }" />
+</template>
+
+<style>
+canvas {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.cut {
+  border: 1px solid #531887;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
