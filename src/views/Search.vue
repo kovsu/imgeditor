@@ -15,9 +15,14 @@ const url = ref<string>("");
 
 function addImage() {
   if (url.value) {
+    const nowEdit = images.value.length === 0;
     images.value.push({
       url: url.value,
       edit: false,
+      width: 300,
+      height: 200,
+      zoom: 1,
+      nowEdit,
     });
     url.value = "";
   }

@@ -11,5 +11,9 @@ export const router = createRouter({
       path: "/search",
       component: () => import("../views/Search.vue"),
     },
+    {
+      path: "/editor",
+      component: () => import("../views/Editor.vue"),
+    },
   ],
 });
