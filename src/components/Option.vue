@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { nowImage, waitImage } from "../composable/data";
+
 defineProps<{
   type: string
 }>();
@@ -13,34 +15,29 @@ function togglePanel() {
     <p class="option__name">
       <slot name="option_name" />
     </p>
-    <div v-if="type === 'text'" class="option__input">
-      <input type="text">
+    <div v-if="type === 'width'" class="option__input w">
+      <input v-model="nowImage!.width" type="text">
+    </div>
+    <div v-else-if="type === 'height'" class="option__input h">
+      <input v-model="nowImage!.height" type="text">
     </div>
     <div v-else-if="type === 'range'" class="option__range">
-      <input type="range" min="1" max="2" step="0.1" value="1">
+      <input v-if="nowImage?.zoom" v-model="nowImage.zoom" type="range" min="1" max="2" step="0.1">
     </div>
     <div v-else-if="type === 'wait-list'" class="wait__list">
       <div class="wait__list-active">
-        <div class="wait__list-img">
-          <img src="https://images.unsplash.com/photo-1676321685222-0b527e61d5c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60s" alt="">
+        <div class="wait__list-img" :style="{ borderColor: nowImage?.edit ? '#531887' : '#fff' }">
+          <img :src="nowImage?.url" alt="">
         </div>
-        <p>Now editor picture</p>
         <div class="arrow" @click="togglePanel">
           <Icon icon="material-symbols:arrow-drop-down-rounded" />
         </div>
       </div>
       <ul class="wait__list-panel">
-        <li class="wait__list-option">
-          <div class="wait__list-img">
-            <img src="https://images.unsplash.com/photo-1676321685222-0b527e61d5c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60s" alt="">
+        <li v-for="l in waitImage" :key="l.url" class="wait__list-option">
+          <div class="wait__list-img" :style="{ borderColor: nowImage?.edit ? '#531887' : '#fff' }">
+            <img :src="l.url" alt="">
           </div>
-          <p>Now editor picture</p>
-        </li>
-        <li class="wait__list-option">
-          <div class="wait__list-img">
-            <img src="https://images.unsplash.com/photo-1676321685222-0b527e61d5c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60s" alt="">
-          </div>
-          <p>Now editor picture</p>
         </li>
       </ul>
     </div>
@@ -125,7 +122,7 @@ function togglePanel() {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 0 1.2rem;
     border-radius: 5px;
     background-color: #F1F1F1;
@@ -171,7 +168,7 @@ function togglePanel() {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 0.6rem 1.2rem;
     transition: all 0.15s;
     cursor: pointer;

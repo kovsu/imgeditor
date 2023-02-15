@@ -1,6 +1,6 @@
 import { computed, ref } from "vue";
 
-interface Image {
+export interface Image {
   url: string
   edit: boolean
   width: number
@@ -20,4 +20,8 @@ export const images = ref<Image[]>([{
 
 export const nowImage = computed(() => {
   return images.value.find(image => image.nowEdit);
+});
+
+export const waitImage = computed(() => {
+  return images.value.filter(image => !image.nowEdit);
 });

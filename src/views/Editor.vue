@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import ImageEditor from "../components/ImageEditor.vue";
 import TheOption from "../components/Option.vue";
+import { nowImage, waitImage } from "../composable/data";
 
 const w = ref(100);
 const h = ref(100);
@@ -19,12 +20,12 @@ onMounted(() => {
       <ImageEditor :w="w" :h="h" />
     </div>
     <div class="editor__options">
-      <TheOption type="text">
+      <TheOption type="width">
         <template #option_name>
           width:
         </template>
       </TheOption>
-      <TheOption type="text">
+      <TheOption type="height">
         <template #option_name>
           height:
         </template>
@@ -66,7 +67,7 @@ onMounted(() => {
     width: 60%;
     height: calc(100vh - 25rem);
     border-radius: 2px;
-    border: 1px solid #000;
+    overflow: hidden;
   }
 
   &__options {

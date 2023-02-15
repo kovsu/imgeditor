@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { nowImage } from "../composable/data";
 
 const props = defineProps<{
@@ -18,6 +18,8 @@ onMounted(() => {
 function drawImage() {
   if (!nowImage.value?.url) return;
 
+  console.log("draw");
+
   const img = new Image();
   img.src = nowImage.value.url;
   const widthRate = img.width / (img.height + img.width);
@@ -27,6 +29,10 @@ function drawImage() {
     context.value!.drawImage(img, 0, 0, props.w * widthRate * nowImage.value!.zoom, props.h * heightRate * nowImage.value!.zoom);
   };
 }
+
+watch(nowImage, () => {
+  drawImage();
+});
 </script>
 
 <template>
@@ -47,5 +53,7 @@ canvas {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.25);
 }
 </style>
