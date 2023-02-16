@@ -23,6 +23,10 @@ function addImage() {
       height: 200,
       zoom: 1,
       nowEdit,
+      position: {
+        x: 0,
+        y: 0,
+      },
     });
     url.value = "";
   }

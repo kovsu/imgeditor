@@ -9,10 +9,29 @@ const props = defineProps<{
 
 const context = ref<CanvasRenderingContext2D | null>(null);
 const c = ref<HTMLCanvasElement | null>(null);
+const draggable = ref(false);
 
 onMounted(() => {
   context.value = c.value!.getContext("2d");
   drawImage();
+
+  c.value?.addEventListener("mousedown", (e: MouseEvent) => {
+    draggable.value = true;
+  });
+
+  c.value?.addEventListener("mouseup", () => {
+    draggable.value = false;
+  });
+
+  c.value?.addEventListener("mousemove", (e: MouseEvent) => {
+    if (!draggable.value) return;
+    if (!nowImage.value?.edit)
+      nowImage.value!.edit = true;
+
+    nowImage.value!.position.x += e.movementX;
+    nowImage.value!.position.y += e.movementY;
+    drawImage();
+  });
 });
 
 function drawImage() {
@@ -26,12 +45,15 @@ function drawImage() {
   const heightRate = img.height / (img.height + img.width);
 
   img.onload = () => {
-    context.value!.drawImage(img, 0, 0, props.w * widthRate * nowImage.value!.zoom, props.h * heightRate * nowImage.value!.zoom);
+    context.value!.clearRect(0, 0, props.w, props.h);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    context.value!.drawImage(img, nowImage.value?.position.x!, nowImage.value?.position?.y!, props.w * widthRate * nowImage.value!.zoom, props.h * heightRate * nowImage.value!.zoom);
   };
 }
 
-watch(nowImage, () => {
+watch(() => [nowImage.value?.zoom, nowImage.value?.edit], () => {
   drawImage();
+  nowImage.value!.edit = true;
 });
 </script>
 

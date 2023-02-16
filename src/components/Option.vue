@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { nowImage, waitImage } from "../composable/data";
+import type { Ref } from "vue";
+import type { Image } from "../composable/data";
+import { images, nowImage, waitImage } from "../composable/data";
 
 defineProps<{
   type: string
@@ -7,6 +9,16 @@ defineProps<{
 
 function togglePanel() {
   document.querySelector(".wait__list")!.classList.toggle("active");
+}
+
+function changeImage(img: Image) {
+  images.value.forEach((i) => {
+    if (i.url === img.url)
+      i.nowEdit = true;
+    else
+      i.nowEdit = false;
+  });
+  togglePanel();
 }
 </script>
 
@@ -22,7 +34,7 @@ function togglePanel() {
       <input v-model="nowImage!.height" type="text">
     </div>
     <div v-else-if="type === 'range'" class="option__range">
-      <input v-if="nowImage?.zoom" v-model="nowImage.zoom" type="range" min="1" max="2" step="0.1">
+      <input v-if="nowImage?.zoom" v-model="nowImage.zoom" type="range" min="1" max="5" step="0.1">
     </div>
     <div v-else-if="type === 'wait-list'" class="wait__list">
       <div class="wait__list-active">
@@ -34,7 +46,7 @@ function togglePanel() {
         </div>
       </div>
       <ul class="wait__list-panel">
-        <li v-for="l in waitImage" :key="l.url" class="wait__list-option">
+        <li v-for="l in waitImage" :key="l.url" class="wait__list-option" @click="changeImage(l)">
           <div class="wait__list-img" :style="{ borderColor: nowImage?.edit ? '#531887' : '#fff' }">
             <img :src="l.url" alt="">
           </div>
