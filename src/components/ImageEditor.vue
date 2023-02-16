@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 import { nowImage } from "../composable/data";
 
 const props = defineProps<{
@@ -59,7 +59,7 @@ watch(() => [nowImage.value?.zoom, nowImage.value?.edit], () => {
 
 <template>
   <canvas ref="c" :width="w" :height="h" :style="{ width: `${w / 2}px`, height: `${h / 2}px` }" />
-  <div class="cut" :style="{ width: `${nowImage?.width}px`, height: `${nowImage?.height}px` }" />
+  <canvas class="cut" :style="{ width: `${nowImage?.width}px`, height: `${nowImage?.height}px` }" />
 </template>
 
 <style>

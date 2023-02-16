@@ -19,8 +19,8 @@ function addImage() {
     images.value.push({
       url: url.value,
       edit: false,
-      width: 300,
-      height: 200,
+      width: 100,
+      height: 100,
       zoom: 1,
       nowEdit,
       position: {
@@ -34,6 +34,10 @@ function addImage() {
 
 function removeImage(index: number) {
   images.value.splice(index, 1);
+  images.value.forEach((img) => {
+    img.nowEdit = false;
+  });
+  images.value[0].nowEdit = true;
 }
 </script>
 

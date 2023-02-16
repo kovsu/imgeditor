@@ -3,7 +3,4 @@
 # Image Editor
 
 ## Todo
-
-- [] Search 页面的动画（可以借鉴 auto animate）
-- [] Editor 页面
-
+- 用 pinia 把两个 canvas 以及 images 的相关数据保存

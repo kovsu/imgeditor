@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import ImageEditor from "../components/ImageEditor.vue";
 import TheOption from "../components/Option.vue";
-import { nowImage, waitImage } from "../composable/data";
+import { exportImage, nowImage, waitImage } from "../composable/data";
 
 const w = ref(100);
 const h = ref(100);
@@ -44,7 +44,7 @@ onMounted(() => {
         <button class="btn">
           Preview
         </button>
-        <button class="btn">
+        <button class="btn" @click="exportImage()">
           Export
         </button>
       </div>

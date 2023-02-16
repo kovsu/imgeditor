@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Ref } from "vue";
+import { Ref, inject } from "vue";
 import type { Image } from "../composable/data";
 import { images, nowImage, waitImage } from "../composable/data";
 
@@ -47,7 +47,7 @@ function changeImage(img: Image) {
       </div>
       <ul class="wait__list-panel">
         <li v-for="l in waitImage" :key="l.url" class="wait__list-option" @click="changeImage(l)">
-          <div class="wait__list-img" :style="{ borderColor: nowImage?.edit ? '#531887' : '#fff' }">
+          <div class="wait__list-img" :style="{ borderColor: l?.edit ? '#531887' : '#fff' }">
             <img :src="l.url" alt="">
           </div>
         </li>
