@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import ImageEditor from "../components/ImageEditor.vue";
 import TheOption from "../components/Option.vue";
-import { exportImage, nowImage, waitImage } from "../composable/data";
+import { exportImage } from "../composable/data";
 
 const w = ref(100);
 const h = ref(100);
@@ -68,6 +68,9 @@ onMounted(() => {
     height: calc(100vh - 25rem);
     border-radius: 2px;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__options {

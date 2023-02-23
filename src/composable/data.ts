@@ -48,15 +48,10 @@ export const waitImage = computed(() => {
   return images.value.filter(image => !image.nowEdit);
 });
 
-export const exportImage = () => {
-  console.log("hi");
-
-  const cut = document.querySelector(".cut") as HTMLCanvasElement;
-  const img = new Image();
-  img.src = nowImage.value!.url;
-
-  img.onload = () => {
-    const ctx = cut.getContext("2d");
-    ctx!.drawImage(img, nowImage.value!.position.x, nowImage.value!.position.y, nowImage.value!.width, nowImage.value!.height, 0, 0, nowImage.value!.width, nowImage.value!.height);
-  };
+export const exportImage = async () => {
+  const canvas = document.querySelector("canvas")!;
+  const link = document.createElement("a");
+  link.download = "image.jpg";
+  link.href = await canvas.toDataURL();
+  link.click();
 };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, provide, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { nowImage } from "../composable/data";
 
 const props = defineProps<{
@@ -41,6 +41,7 @@ function drawImage() {
 
   const img = new Image();
   img.src = nowImage.value.url;
+  img.setAttribute("crossOrigin", "anonymous");
   const widthRate = img.width / (img.height + img.width);
   const heightRate = img.height / (img.height + img.width);
 
@@ -58,8 +59,7 @@ watch(() => [nowImage.value?.zoom, nowImage.value?.edit], () => {
 </script>
 
 <template>
-  <canvas ref="c" :width="w" :height="h" :style="{ width: `${w / 2}px`, height: `${h / 2}px` }" />
-  <canvas class="cut" :style="{ width: `${nowImage?.width}px`, height: `${nowImage?.height}px` }" />
+  <canvas ref="c" :width="nowImage?.width" :height="nowImage?.height" :style="{ width: `${nowImage!.width}px`, height: `${nowImage!.height}px` }" />
 </template>
 
 <style>
@@ -67,15 +67,7 @@ canvas {
   width: 100%;
   height: 100%;
   cursor: grab;
-}
-
-.cut {
   border: 1px solid #531887;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.15s ease-in-out;
-  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 1000px #c4c4c4;
 }
 </style>
